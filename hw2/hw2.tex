@@ -1,5 +1,4 @@
-\input{settings} % add packages, settings, and declarations in settings.tex
-
+\input{settings} 
 \begin{document}
 
 \lhead{Yida Liu} 
@@ -57,7 +56,7 @@ Again, let us have the complete model first:
 \end{align*}
 
 \textbf{Solution:}\par
-The solution from MATLAB \texttt{linprog} suggests using 2923.9766 and 1307.1895 gallons of raw materials on process 1 and 2. This yields final production of 1700 and 800 gallons of product A and B. This solution is consistent with the previous solution in Homework 1 with Excel Solver.
+The solution from MATLAB \texttt{linprog} suggests using 2923.9766 and 1307.1895 gallons of raw materials on process 1 and 2, which would eventually yield a profit of \$18340 (or \$18339.5919, to be specific). This solution results in final production of 1700 and 800 gallons of product A and B. This solution is consistent with the previous solution in Homework 1 with Excel Solver.
 
 \section{Circle from Rubber}
 
@@ -148,12 +147,12 @@ After inspecting the left plot, we there might be a better solution, as it is ob
     \begin{minipage}{.46\textwidth}
         \centering
         \includegraphics[width=0.9\linewidth]{hw2/hw2-prob4.png}
-        \caption{A DAG Representing Possible Locations for Generator and Power Line}
+        \caption{A Directed Graph of the Nodes and Possible Location of Power Lines (labeled)}
         \label{fig:dag_power}
     \end{minipage}%
     \begin{minipage}{.46\textwidth}
         \centering
-        \includegraphics[width=0.9\linewidth]{hw2/hw2-prob4-sol.png}
+        \includegraphics[width=0.8\linewidth]{hw2/hw2-prob4-sol.png}
         \caption{Solution for Power Generator Placement (with reversed negative edges)}
         \label{fig:sol_power}
     \end{minipage}
@@ -228,8 +227,20 @@ Environmental restrictions specifies that no more than two generators may be bui
 &&& y_{4} + y_{8} + y_{12} + y_{16} \leq 2 && (\text{Generator in y-coordinate 4}) \\
 \end{align*}
 
+\item Generator Pair \par
+Environmental restriction specifies that if a generator is built at node 4, then another must be build on node 13. 
+\begin{align*}
+&&& y_4- y_{13} \leq 0 & &(\text{Generator Pair 4 - 13})
+\end{align*}
+
 \item Power Equilibrium \par
-The power input enters a node equals the output the node.
+The power input enters a node equals the output the node. 
+As shown in the hint:
+\begin{align*}
+&&& e_i + B_i l = d_i & i \in [1,...,16] & (\text{Power Equilibrium}) \\
+\end{align*}
+, where $B$ is the incidence matrix constructed from the graph. 
+
 
 \item Model Variable Integrity \par
 There are several integrity rules to follow: including non-negativity and integer constraints
@@ -245,6 +256,8 @@ This summarizes the model we built for solving this problem.
 
 \textbf{Solution:}\par
 
-Here we present the solution that came out from MATLAB \texttt{intlinprog}. Essentially, the solution suggests that we build a 100-MW generator at node 7 and a 75-MW generator at node 14, with a number of power lines being built to connect all nodes and satisfy all power demand. The solution is presented in Figure \ref{fig:sol_power}, where all the nagative power line transmission are adjusted to forward edges. 
+Here we present the solution that came out from MATLAB \texttt{intlinprog}. The solution gives an cost of \$875.5. The solution suggests that we build a 100-MW generator at node 7 and a 75-MW generator at node 14, with a number of power lines being built to connect all nodes and satisfy all power demand. The solution is presented in Figure \ref{fig:sol_power}, where all the negative power line transmission are adjusted to forward edges. 
+
+In addition, it is worthwhile noting that there exist more than one solution for this problem. When the placements of power generators are determined, it is trivial to place all the connecting power lines.
 
 \end{document}
