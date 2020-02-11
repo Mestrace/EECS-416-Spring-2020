@@ -1,0 +1,339 @@
+\input{settings} 
+\begin{document}
+
+\lhead{Yida Liu} 
+\rhead{EECS 416 Spring 2020 \\ Convex Optimization for Engineering \\ Homework 4} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+
+\section{Find and Classify the Stationary Points}
+\begin{enumerate}
+\item $x_1^2-x_2^2+x_3^2-2x_1x_3-x_2x_3+4x_1+12$\par
+Set up function $\nabla f=0$
+\[
+\left(\begin{array}{c}
+2\,x_1 -2\,x_3 +4=0\\
+-2\,x_2 -x_3=0\\
+2\,x_3 -x_2 -2\,x_1=0 
+\end{array}\right)
+\]
+which is equivalent to solving the linear system
+\[
+\left[
+\begin{array}{ccc|c}
+2 & 0 & -2  & -4 \\
+0 & -2 & -1  & 0 \\
+-2 & -1 & 2  & 0 \\
+\end{array}
+\right]
+\]
+which has a solution $x = \begin{pmatrix}-10 & 4 & -8\end{pmatrix}^T$. It is easy to show that this solution is unique. Then, the Hessian of f $H_f(\mathbf{x})$
+\[
+\left[\begin{array}{ccc}
+2 & 0 & -2\\
+0 & -2 & -1\\
+-2 & -1 & 2
+\end{array}\right]
+\]
+We have only 1 solution, and no variables in the Hessian of f. Therefore, we can compute the principal minors as follows
+$$\alpha_1 = 2, \alpha_2 = -4, \alpha_3=-2$$
+The result turns out to be that $H_f(x^*)$ is indefinte
+
+\item ${x_1 }^2 \,{x_2 }^2 -4\,{x_1 }^2 \,x_2 +4\,{x_1 }^2 +2\,x_1 \,{x_2 }^2 -8\,x_1 \,x_2 +8\,x_1 +{x_2 }^2 -4\,x_2$\par
+Take $\nabla f=0$
+\[
+\left(\begin{array}{c}
+8\,x_1 -8\,x_2 -8\,x_1 \,x_2 +2\,x_1 \,{x_2 }^2 +2\,{x_2 }^2 +8=0\\
+2\,x_2 -8\,x_1 +4\,x_1 \,x_2 +2\,{x_1 }^2 \,x_2 -4\,{x_1 }^2 -4=0
+\end{array}\right)
+\]
+\par Take Hessian $H_f(x)$
+\[
+\left(\begin{array}{cc}
+2\,{x_2 }^2 -8\,x_2 +8 & 4\,x_2 -8\,x_1 +4\,x_1 \,x_2 -8\\
+4\,x_2 -8\,x_1 +4\,x_1 \,x_2 -8 & 2\,{x_1 }^2 +4\,x_1 +2
+\end{array}\right)
+\]
+
+This system have solutions $(-1, x_2), x_2\in \mathbb{R}$ and $(x_1, 2), x_1\in \mathbb{R}$. We discuss them accordingly.
+
+\begin{enumerate}
+\item $(-1, x_2)$\par
+\[
+H_f(x^*)=\left(\begin{array}{cc}
+2\,{x_2 }^2 -8\,x_2 +8 & 0\\
+0 & 0
+\end{array}\right)
+\]
+We use the direct definition to verify the signed-definiteness
+\begin{align*}
+d^TH_f(x^*)d &= d_1^2 (2x_2^2-8x^2+8) \\
+            &= 2 d_1^2(x_2 - 2)^2 \\
+            & \geq 0, \forall d \in \mathbb{R}
+\end{align*}
+
+These Hessians are psd, therefore these set of stationary points are not local maximizers.
+
+\item $(x_1, 2)$
+\[
+H_f(x^*)=\left(\begin{array}{cc}
+0 & 0\\
+0 & 2\,{x_1 }^2 +4\,x_1 +2
+\end{array}\right)
+\]
+We use the definition
+\begin{align*}
+d^TH_f(x^*)d &= {d_2 }^2 \,{\left(2\,{x_1 }^2 +4\,x_1 +2\right)}\\
+             &= 2d_2^2(x_1 + 1)^2\\
+             &\geq 0, \forall d \in \mathbb{R}
+\end{align*}
+These Hessians are psd, therefore these set of stationary points are not local maximizers
+
+\end{enumerate}
+
+\item ${{\left(x_2 +1\right)}}^2 +x_1 \,x_2 +{x_1 }^4$\par
+\[
+\nabla f = \left(\begin{array}{c}
+4\,{x_1 }^3 +x_2 \\
+x_1 +2\,x_2 +2
+\end{array}\right)
+\]
+
+\[
+H_f(x)=\left(\begin{array}{cc}
+12\,{x_1 }^2  & 1\\
+1 & 2
+\end{array}\right)
+\]
+
+This function has one real solution $x^*=(0.6858, -1.3479)$, which gives hessian
+\[
+\left(\begin{array}{cc}
+5.8111 & 1\\
+1 & 2
+\end{array}\right)
+\]
+\[
+\alpha_1 = 5.8111, \alpha_2 = 10.6221
+\]
+Thus, the hessian is positive definite and therefore this stationary point is a strict local minimizer.
+
+\item $2\,x_2 -2\,x_1 +{{\left(x_1 -x_2 \right)}}^4 +{x_1 }^2 -{x_2 }^2 +1$\par
+\[
+\nabla f = \left(\begin{array}{c}
+2\,x_1 +4\,{{\left(x_1 -x_2 \right)}}^3 -2\\
+2-4\,{{\left(x_1 -x_2 \right)}}^3 -2\,x_2 
+\end{array}\right)
+\]
+\[
+H_f(x) = \left(\begin{array}{cc}
+12\,{{\left(x_1 -x_2 \right)}}^2 +2 & -12\,{{\left(x_1 -x_2 \right)}}^2 \\
+-12\,{{\left(x_1 -x_2 \right)}}^2  & 12\,{{\left(x_1 -x_2 \right)}}^2 -2
+\end{array}\right) 
+\]
+
+$\nabla f = 0$ has one solution $x^*=(1, 1)$ that has hessian $H_f(x^*)$
+\[
+\left(\begin{array}{cc}
+2 & 0\\
+0 & -2
+\end{array}\right)
+\]
+\[
+\alpha_1 = 2,\alpha_2 = -4
+\]
+This hessian is indefinite, and therefore this is a point of inflection.
+\end{enumerate}
+
+\section{Determine Convexity}
+\begin{enumerate}
+\item $f(x) =x_1^2+cosh\,x^2$ \par
+decompose into three parts:
+\[
+f_1(\mathbf{x}) = x_1^2, f_2(\mathbf{x}) = \frac{e^x_2}{2},  f_3(\mathbf{x}) = \frac{e^{-x_2}}{2}
+\]
+By definition, the three functions are convex, and their composition of $f(\mathbf{x})$ is a non-negative linear combination, the original function $f$ is convex.
+
+\item $f(x) = x_1^2+2x_2^2+2x_3^3+x_4^2-x_1x_2+x_1x_3-2x_2x_4+x_1x_4$ \par
+Convert to quadratic matrix form
+\[
+f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T
+\left(\begin{array}{cccc}
+2 & -1 & 1 & 1\\
+-1 & 4 & 0 & -2\\
+1 & 0 & 4 & 0\\
+1 & -2 & 0 & 2
+\end{array}\right)\mathbf{x}
+\]
+It is easy to show that $A$ is positive definite using Sylvester's theorem by checking all of its principal minors. To show that $f(x)$ is convex, we need to show
+\[
+f((1-\lambda)u+\lambda v) \leq (1-\lambda)f(u)+\lambda f(v)
+\]
+which is
+\[
+\frac{1}{2}((1-\lambda)u+\lambda v)^T A (1-\lambda)u+\lambda v \leq \frac{1}{2}( (1-\lambda)u^TAu+\lambda v^TAv)
+\]
+This equality we would like to show can be simplified to
+\[
+2u^TAv \leq u^TAu + v^TAv
+\]
+By AM-GM inequality, the above simplified inequality holds. Therefore, $f(x)$ is convex.
+
+
+
+\item $f(x) = x_1^2-2x_2^2-2x_3^2+x_4^2-x_1x_2+x_1x_3-2x_2x_4+x_1x_4$\par
+We can obtain its hessian $H_f(x)$
+\[
+\left(\begin{array}{cccc}
+2 & -1 & 1 & 1\\
+-1 & -4 & 0 & -2\\
+1 & 0 & -4 & 0\\
+1 & -2 & 0 & 2
+\end{array}\right)
+\]
+which has principal minors
+\[
+\alpha_1 = 2, \alpha_2 = -9, \alpha_3=40, \alpha_4=84
+\]
+Thus this $H_f(x)$ is indefinite for all $x\in\mathbb{R}$, and $f(x)$ is neither convex or concave.
+
+\item $\alpha \,{x_1 }^p \,{x_2 }^q$\par
+This function has hessian $H_f(x)$
+\[
+\left(\begin{array}{cc}
+\alpha \,p\,{x_1 }^{p-2} \,{x_2 }^q \,{\left(p-1\right)} & \alpha \,p\,q\,{x_1 }^{p-1} \,{x_2 }^{q-1} \\
+\alpha \,p\,q\,{x_1 }^{p-1} \,{x_2 }^{q-1}  & \alpha \,q\,{x_1 }^p \,{x_2 }^{q-2} \,{\left(q-1\right)}
+\end{array}\right)
+\]
+which gives principal minors
+\[
+\alpha_1 = \frac{\alpha \,p\,{x_1 }^p \,{x_2 }^q \,{\left(p-1\right)}}{{x_1 }^2 }
+\alpha_2 = -\frac{\alpha^2 \,p\,q^2 \,{x_1 }^{2\,p} \,{x_2 }^{2\,q} -\alpha^2 \,p\,q\,{x_1 }^{2\,p} \,{x_2 }^{2\,q} +\alpha^2 \,p^2 \,q\,{x_1 }^{2\,p} \,{x_2 }^{2\,q} }{{x_1 }^2 \,{x_2 }^2 }
+\]
+We can make use of the signed definitiveness property to let this parameterized function to be in convex / concave. We hereby discuss separately.
+
+\begin{enumerate}
+\item Convex
+\begin{align*}
+    \alpha p (p-1)& \geq0 \\
+    \alpha^2 pq (1 - p - q) &\geq 0
+\end{align*}
+\item Strictly Convex
+\begin{align*}
+    \alpha p (p-1)& > 0 \\
+    \alpha^2 pq (1 - p - q) &> 0
+\end{align*}
+\item Concave
+\begin{align*}
+    \alpha p (p-1)& \leq0 \\
+    \alpha^2 pq (1 - p - q) &\leq 0
+\end{align*}
+\item Strictly Convex
+\begin{align*}
+    \alpha p (p-1)& < 0 \\
+    \alpha^2 pq (1 - p - q) &< 0
+\end{align*}
+\end{enumerate}
+
+\end{enumerate}
+
+\section{A Function that is Neither Convex or Concave}
+This function has Hessian $H_f(x)$
+\[
+\left(\begin{array}{cc}
+2 & -2\\
+-2 & 2\,x_2 
+\end{array}\right)
+\]
+which gives principal minor
+\[
+\alpha_1 = 2, \alpha_2 = 4x_2-4
+\]
+To find out on the convexity of this function on different convex sets, we use the Sylvester's Theorem to determine its signed definiteness on different sets. 
+\begin{enumerate}
+    \item Convex: $H_f(x)$ is psd\par
+    To satisfy this, we must have $\alpha_1\geq 0, \alpha_2=0$. The solution set will be $\{x_1\in \mathbb{R}, x_2 \geq 1\}$
+    \item Strictly convex: $H_f(x)$ is pd\par
+    We must have $\alpha_i > 0 $. $x_2 > 1$ satisfies this condition, which gives $\{x_1\in\mathbb{R}, x_2>1\}$
+    \item Concave: $H_f(x)$ is nsd\par
+    We must have odd $\alpha_i < 0$ and even $\alpha_i > 0$. No set is concave under problem setting.
+\end{enumerate}
+
+\section{The Max of Two Functions}
+
+We use the property of convex function to show this. Here we show a example: 
+
+$\forall x_1 \neq x_2 \in \mathbb{R}, 0 \leq \lambda \leq 1$
+\begin{align*}
+f((1 - \lambda)x_1 + \lambda x_2) &= \max\{f_1((1 - \lambda)x_1 + \lambda x_2), f_2((1 - \lambda)x_1 + \lambda x_2)\} \\
+&\leq \max\{f_1((1 - \lambda)x_1) + f_1(\lambda x_2), f_2((1 - \lambda)x_1) + f_2(\lambda x_2)\} & (f_1, f_2\text{ convex})\\
+&\leq \max\{f_1((1 - \lambda)x_1), f_2((1 - \lambda)x_1)\} + \max\{f_1(\lambda x_2), f_2(\lambda x_2)\} \\
+&= (1-\lambda)f(x_1) + \lambda f(x_2)
+\end{align*}
+
+This is easy to extend to higher dimensions (i.e. $x \in \mathbb{R}^n$).
+
+\section{Monotonicity to Convexity}
+
+\subsection{Monotonic Nested Function}
+
+We can take the gradient of the function
+\[
+\nabla h(x) = g'(f(x))\nabla f(x)
+\]
+by chain rule.
+In addition, we can further take the hessian of the function. which gives
+\[
+H_h(x) = g''(f(x))\nabla f(x) \nabla f(x)^T + g'(f(x))H_f(x)
+\]
+Since 
+\begin{enumerate}
+    \item $g$ is monotonic non-decreasing, $g'\geq 0$
+    \item $g$ is convex, $g''\geq 0$
+    \item $f$ is convex, $H_f(x)$ is positive definite.
+\end{enumerate}
+we have $H_h(x)$ is positive definite, and therefore $h(x)$ is convex.
+
+\subsection{An Example}
+We can decompose this function as the combination of functions: $f(\mathbf{x}) = g(h(\mathbf{x}))$ where $g(x) = e^x$ and $f(\mathbf{x}) = c_1x_1^2+ c^2x_1^{-1} + c_3x_2^2+c_4x_2^{-1}$.
+
+By its simple form, $g$ is convex and monotonic increasing. $h$ can be considered as a non-negative linear combination of functions. 
+\begin{enumerate}
+    \item $x^2$: by definition, it is convex
+    \item $x^{-1}$\par
+    We check the definition
+    \begin{align*}
+    \frac{1}{(1-\lambda)x_1+\lambda x_2} &\leq \frac{1-\lambda}{x_1} + \frac{\lambda}{x_2} \\
+    (1-\lambda)^2 + \lambda^2 + \lambda(1 - \lambda) (\frac{x_1}{x_2} + \frac{x_2}{x_1}) &\geq 1\\
+    -2\lambda(1 - \lambda) + \lambda(1-\lambda)(\frac{x_1}{x_2} + \frac{x_2}{x_1}) \geq 0\\
+    x_1^2 - 2x_1x_2 + x_2^2 \geq 0 \\
+    (x_1 - x_2)^2 \geq 0
+    \end{align*}
+    Since domain $S$ for $f$ is $\{x \in \mathbb{R}^2 | x \geq 0\}$, the above inequality holds true on $S$ and therefore $x^{-1}$ is convex on domain $S$.
+\end{enumerate}
+Therefore, on domain $S$, $h$ can be considered as a non-negative linear combination of convex function and therefore is convex. 
+
+We can conclude that $f$, the nesting of convex monotonic increasing function $g$ and convex function $h$, is convex.
+
+\section{Rosenbrock's Function}
+We take its Hessian $H_f(x)$
+\[
+\left(\begin{array}{cc}
+1200\,{x_1 }^2 -400\,x_2 +2 & -400\,x_1 \\
+-400\,x_1  & 200
+\end{array}\right)
+\]
+which has principal minors
+\[
+\alpha_1 = 1200x_1^2-400x_2 + 2, \alpha_2 = 80000\,{x_1 }^2 -80000\,x_2 +400
+\]
+
+For this function to be strictly convex, $H_f(x)$ must be pd for all $x$ on its domain. This can be further extended by Sylvester's theorem, which specifies that all principal minors $\alpha_i > 0$. Thus, we have the following inequalities that need to hold
+\begin{align*}
+    3x_1^2-x_2+0.005 &> 0\\
+    x_1^2 - x_2 + 0.005 &> 0
+\end{align*}
+As the domain $S = \{x \in \mathbb{R}^2 | x_1^2-x_2+0.005 > 0\}$, it is obvious that the above 2 inequality holds on domain $S$. Thus, Rosenbrock's function is strictly convex on $S$. 
+
+
+\end{document}
