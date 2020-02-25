@@ -1,0 +1,135 @@
+\input{settings} 
+\begin{document}
+
+\lhead{Yida Liu} 
+\rhead{EECS 416 Spring 2020 \\ Convex Optimization for Engineering \\ Homework 6} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\newcommand{\mbf}{\mathbf}
+\newcommand{\T}{^\intercal}
+\newcommand{\partialgx}{\frac{\partial g(\mathbf{x})}{\partial\mathbf{x}}}
+\newcommand{\partialgl}{\frac{\partial g(\mathbf{x})}{\partial\mathbf{\lambda}}}
+
+
+\section{Find Global Minimizers}
+
+\subsection{$f(\mbf x) = \frac{1}{2} (\mbf{x - x_0})\T (\mbf{x - x_0})$}
+
+Apply the Lagrange multipliers, 
+\[
+\min g(\mbf{x, \lambda}) = \frac{1}{2} (\mbf{x - x_0})\T (\mbf{x - x_0}) + \lambda^\intercal (\mbf{a^\intercal x}- b)
+\]
+Solve for stationary points,
+\begin{align*}
+&\partialgx:\, & \frac{1}{2}(\mbf{x - x_0}) + \mbf{a^\intercal\lambda} = 0 \\
+&\partialgl:\, & \mbf{a^\intercal x} - b = 0
+\end{align*}
+We can solve for $\mbf x$ from the first equation
+\[
+\mbf{x = x_0 - 2a^\intercal \lambda}
+\]
+Plug in the second equation
+\begin{align*}
+\mathbf{a^\intercal x_0 - 2a^\intercal a \lambda} - b &= 0 \\
+\lambda^* &= \frac{\mbf{a^\intercal x_0} - b}{2 \mbf{a^\intercal a}}
+\end{align*}
+Plug back to solve for x
+\[
+\mbf{x^* = x_0} +  \frac{b - \mbf{a^\intercal x_0}}{\mbf{a^\intercal a}} \mbf{a}
+\]
+To show that $x^*$ is a global minimizer, we show that $\forall x$ in constraint set $\mbf{a^\intercal x} = b$
+\begin{align*}
+f(\mbf x) &\geq f(\mbf x^*) + \nabla f(\mbf x^*)(\mbf{x - x^*}) \\
+&=  f(\mbf x^*) - {\lambda^*}^\intercal a (\mbf{x - x^*}) \\
+&=  f(\mbf x^*) 
+\end{align*}
+It is also possible to show the above equation by plugging in the actual values of $x^*$ and $\lambda^*$.
+
+\subsection{Homework 5, Problem 3.(d)}
+
+\[
+f = x_1^2 + x_1 x_2 + 3x_2^2 + 4x_1 + 5x_2 + 6x_3
+\]
+with affine constraints shown in matrix form
+\[
+\left[
+\begin{array}{ccc|c}
+     1 &  2 & 0 & 3 \\
+     4 & 0 & 5 & 6
+\end{array}
+\right]
+\]
+
+\subsubsection{Elimination of Variables}
+Let
+\begin{align*}
+x_2 &= 1.5 - 0.5x_1 \\
+x_3 &= \frac{6}{5} - \frac{4}{5}x_1
+\end{align*}
+Substitute into the original function and expand, we get
+$f(x) = 1.25x_1^2 -6.3x_1 + 21.45$ as an unconstrainted problem.
+
+Solve for gradient $2.5x_1 -6.3 = 0$, we get $x_1^*=2.52$, $x_2 = 0.24$, $x_3 = -0.816$
+
+\subsection{Lagrange Multiplier}
+Rewrite the function to Lagrange multiplier form and solve for the stationary points,
+\begin{align*}
+    x_1 +2\,x_2 -3 = 0\\
+4\,x_1 +5\,x_3 -6 = 0\\
+\lambda_1 +4\,\lambda_2 +2\,x_1 +x_2 +4 = 0\\
+2\,\lambda_1 +x_1 +6\,x_2 +5= 0\\
+5\,\lambda_2 +6 = 0
+\end{align*}
+
+We get the solution $x^* = (2.52, 0.24, -0.816)$ and $\lambda^* = (-4.48, -1.2)$
+
+\section{Use MATLAB to Find Global Minimizers}
+\textit{See attached MATLAB source code}
+\par We first construct this QP problem, specifically, the coefficients $\mathbf{Q, q, A, b}$, from the known. We verify that it is convex by checking all of the principal minors of the Hessian, which is exactly $Q$, to be positive, using the following command
+\begin{align*}
+\texttt{all(arrayfun(@(x) det(Q(1:x, 1:x)) > 0, 1:16))}
+\end{align*}
+,which yields to true since all the principal minors of $Q$ are greater than zero.
+
+Applying the Lagrange Multipliers, we obtain the following unconstrained quadratic programming problem
+\[
+\underset{\mathbf{x} \lambda}{\min}\,\, g(\mathbf{x, \lambda}) = \frac{1}{2}\mathbf{x^\intercal Q \mathbf{x} + q^\intercal x + \lambda^\intercal (Ax - b)}
+\]
+
+Solving for the stationary points
+\begin{align*}
+& \partialgx:\, & \mathbf{Qx + q + A^\intercal \lambda} = 0 \\
+& \partialgl:\, & \mathbf{Ax - b} = 0
+\end{align*}
+, we have
+\begin{align*}
+\mathbf{x^*} &=\mathbf{-Q^{-1} (q + A^\intercal \lambda^*)}\\
+\mathbf{\lambda^*}&=\mathbf{-(AQ^{-1}A^\intercal)^{-1} (AQ^{-1}q + b)}
+\end{align*}
+
+\begin{align*}
+x^* = &(2.1276,
+   -1.6864,
+   -2.9435,
+    2.6704,
+   -0.1504,
+    0.2752,
+   -0.6677,
+    0.5639,\\
+   &-3.6931,
+    5.9767,
+    2.8624,
+   -5.0931,
+   -1.3613,
+    0.9655,
+   -1.4630,
+    1.3244
+)
+\end{align*}
+\[
+\lambda^* = (    2.3451,
+   -5.5530,
+    2.6184,
+    0.3165)
+\]
+\end{document}

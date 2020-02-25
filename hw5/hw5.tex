@@ -1,0 +1,193 @@
+\input{settings} 
+\begin{document}
+
+\lhead{Yida Liu} 
+\rhead{EECS 416 Spring 2020 \\ Convex Optimization for Engineering \\ Homework 5} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\section{Convex Functions}
+
+\subsection{$f(x) = x^p$ in $\mathbb{R}_{++}$}
+
+This function has derivative $p\,x^{p - 1}$ and 2nd-derivative $p\,(p - 1)\,x^{p - 2}$. Equivalently, we could put the 2nd-derivative in a $1\times 1$ matrix, which become the Hessian $H_f(x)$. Therefore, we could check for its signed definitiveness by
+\[
+d^\intercal\, H_f(x)\, d = d^2p(p - 1)x^{p - 2}
+\]
+We would like to check the sign of the above expression to determine the convexity of the function. The knowns are: $\forall d \in \mathbb{R}, d^2 \geq 0$ and $\forall x\in \mathbb{R}_{++}, x^{p - 2} \geq 0$. The only thing left is $p\,(p - 1)$, which we discuss in cases:
+\begin{enumerate}
+\item $p \geq 1$ or $p < 0$
+\par If $p \geq 1$, then $(p - 1) \geq 0$, which let the whole expression $\geq 0$; If $p < 0$. $p - 1 <0$, this multiplication is positive. Thus, $d^\intercal\, H_f(x)\, d \geq 0, \forall d \in \mathbb{R}$, $H_f(x)$ is psd, and thus, under the condition, function is convex.
+\item $0 < p < 1$
+\par $p$ is positive while $p - 1$ is negative, therefore the expression is $\leq 0$, $H_f(x)$ is nsd, and thus function is concave.
+\end{enumerate}
+
+\subsection{$f(\mathbf{x})=||\mathbf{x}||_p = (|x_1|^p+...+|x_n|^p)^{\frac{1}{p}}$, $p\geq 1$}
+Let $x, y \in \mathbb{R}^n, \lambda \in [0, 1], \bar{\lambda} = 1 - \lambda$,
+\begin{align*}
+f(\bar{\lambda}\,x + \lambda\,y) 
+&= ||\bar{\lambda}\,x + \lambda\,y||_p & \\
+&\leq ||\bar{\lambda}\,x||_p  + || \lambda\,y||_p & (\text{Minkowski's Inequality})\\
+&= (\sum_i^n |\bar{\lambda}\,x_i|^p)^\frac{1}{p} + (\sum_i^n |\lambda\,y_i|^p)^\frac{1}{p} \\
+&= \bar{\lambda}(\sum_i^n |x_i|^p)^\frac{1}{p} + \lambda(\sum_i^n |y_i|^p)^\frac{1}{p} \\
+&= \bar{\lambda} ||x||_p + \lambda ||y||_p \\
+&= \bar{\lambda} f(x) + \lambda f(y)
+\end{align*}
+Thus, $f(x)$ is convex.
+
+\section{Convex Sets}
+
+\subsection{$C_1 = \{x \in \mathbb{R}^n | h(x) = 0\}$}\label{prob:hw5-prob2-a}
+
+\subsubsection{$h(x)$ is affine}
+Let $x_1, x_2 \in C_1, \lambda \in [0, 1], \hat{\lambda} = 1  - \lambda$,
+
+\begin{align*}
+h(\hat{\lambda}x_1 + \lambda x_2) &= a^T(\hat \lambda x_1 + \lambda x_2) + b \\
+&= (a^T \hat \lambda x_1 + \hat \lambda b) + (a^T \lambda x_2 + \lambda b) \\
+&= \hat \lambda h(x_1) + \lambda h(x_2)\\
+&= 0
+\end{align*}
+
+Thus, for any point $p$ in the line between any two point $x_1, x_2$, $p \in C_1$
+
+\subsubsection{$h(x)$ is not affine} 
+Given the condition
+\[
+h(\hat \lambda x_1 + \lambda x_2) \neq \lambda \hat \lambda h(x_1) + \lambda h(x_2) \neq 0
+\]
+Then we have some point in the straight line in between $x_1$ and $x_2$ that does not belongs to the set, which, by definition of convex set, shows that this set with non-affine $h(x)$ is not a convex set.  
+
+\subsection{$C_2=\{x \in \mathbb{R}^n | g(x)\leq 0\}$ is a convex set if $g(x)$ is convex on $C_2$} \label{prob:hw5-prob2-b}
+Let $x_1, x_2 \in C_2, \lambda \in [0, 1], \hat{\lambda} = 1  - \lambda$, by definition of convex function, 
+\begin{align*}
+g(\hat \lambda x_1 + \lambda x_2 ) &\leq \hat \lambda g(x_1) + \lambda g(x_2) \\
+&\leq 0
+\end{align*}
+Thus, $C_2$ is a convex set.
+
+\subsection{$C_3=\{x\in \mathbb{R}^n | \forall i \in [1,...,m], h_i(x) = 0, \, \forall j \in [1,...,l], g_j(x) \leq 0\}$ is a convex set if each $h_i(x)$ is affine and each $g_j(x)$ is convex in $C_3$}
+
+Suppose we have $\forall i \in [1,...,m],\, A_i = \{x\in \mathbb{R}^n | h_i(x)=0\}$ and $\forall j \in [1,...,l],\, S_j=\{x\in \mathbb{R}^n | g_j(x)\leq 0\}$, following the problem definition, then $C_3$ is the intersection of all $A_i$ and $S_j$. By proof in Problem \ref{prob:hw5-prob2-a} and \ref{prob:hw5-prob2-b}, we've shown that sets like all $A_i$ and all $S_j$ are convex sets. Furthermore, set intersection is a convexity preserving operations. Thus, $C_3 = A_1 \cap...\cap A_n \cap S_1 \cap ... \cap S_l$ is a convex set. 
+
+\subsection{A very complicated function}
+
+We consider set $C$ as the intersection of multiple sets that each has one constraint of $C$. 
+
+\begin{enumerate}
+\item $C_4 = \{\mathbf{x} \in \mathbb{R}^3\,|\,(x_1 - 3)^2 + (x_2 - 3)^2 \leq 1.5\}$
+\par a circle, therefore convex, with the restriction $x_1, x_2 \in [3 - \sqrt{1.5},\, 3 + \sqrt{1.5}]$
+\item $C_2 = \{\mathbf{x} \in \mathbb{R}^3\,|\,x_1+x_2+x_3 \leq 5\}$
+\par half-space, convex.
+\item $C_1 = \{\mathbf{x} \in \mathbb{R}^3\,|\, 3x_1 - 2x_2 + x_3\,\max(3, (x_1 - x_2)^2 - 6) = 3\}$
+\par $C_1$ is conditional on the value of $x_1$ and $x_2$ because of the $\max$ operator. We can discuss in cases based on the solution of $(x_1 - x_2)^2 - 6 = 3$, which $(x_1 - x_2)^2 = 9$.
+\[
+C_1 = \left\{\mathbf{x} \in \mathbb{R}^3\,|
+\begin{cases}
+3x_1 - 2x_2 + 3x_3 = 3 &\text{ if }  |x_1 - x_2| \leq 3 \\
+3x_1 - 2x_2 + x_3\,((x_1 - x_2)^2 - 6) = 3 &\text{ otherwise}
+\end{cases}
+\right\}
+\]
+However, previous discussion on $C_4$ shows that $|x_1 - x_2| \leq 2\sqrt 1.5$. Under the circumstances, $C_1 = \{\mathbf{x} \in \mathbb{R}^3\,|\, 3x_1 - 2x_2 + 3x_3 - 3= 0\}$, which is affine, and therefore convex.
+
+\item $C_3 = \{\mathbf{x} \in \mathbb{R}^3\,|\, f_3(x) = (x_3 - 3)^2 - (x_1 + 2x_2 - 13)^3 - 10 \leq 0\}$
+\par We have 
+\[
+\nabla f = \left(\begin{array}{c}
+     -3(x_1 + 2x_2 - 13)^2 \\
+     -6(x_1 + 2x_2 - 13)^2 \\
+     2 (x_3 - 3)
+\end{array}
+\right)
+\]
+We denote $r = x_1 + 2x_2 - 13$, 
+\[
+H_f(x) = \left(\begin{array}{ccc}
+     -6r & -12r & 0 \\
+     -12r & -24r & 0 \\
+     0 & 0 & 2
+\end{array}
+\right)
+\]
+Then \[
+d^\intercal H_f(x) d = -6r(d_1 + 2d_2)^2 + 2d_3^2
+\]
+By the domain of $x_1$ and $x_2$ derived from $C_4$, it is easy to see that $r < 0$ as, when $x_1,x_2$ are maximized, $r = 9 + 3 \sqrt{1.5} \approx 12.6742 < 13$. Thus $d^\intercal H_f(x)d > 0,\,\forall d \neq 0 \land d \in \mathbb{R}^3$, $H_f(x)$ is pd, $f_3(x)$ is strictly convex on $C$, $C_3$ is a convex set. 
+\end{enumerate}
+
+Thus, $C = C_1 \cap C_2 \cap C_3 \cap C_4$ is convex.  
+
+\section{Convex Optimization Problems}
+
+\subsection{GNS p.489, 2.1}
+It is obvious that the constraint set $S = \{\mathbf X \in \mathbb{R}^3 | 2x_1+5x_2+x_3=3\}$ is convex as it is only an affine constraint. We check to see if the objective function $f(x)$ is convex under the set. At any feasible point, $x_3$ can be expressed in terms of $x_1$ and $x_2$ using the affine constraint, $x_3 = 3 - 2x_1- 5x_2$. The substitution made the problem
+\[
+\min\, f'(\mathbf{x}) = x_1^2+x_1^2(3 - 2x_1 - 5x_2)^2+x_2^4+2x_1x_2+8x_2
+\]
+This function is not convex, which could be easily tested by points $\mathbf{x}_1 = (0, 0)^\intercal, \mathbf{x}_2 = (-1, 1)^\intercal, \lambda = 0.3$,
+\begin{align*}
+f'(\hat\lambda \mathbf{x}_1 + \lambda \mathbf{x}_2) &= f'(\,(-0.3, 0.3)^\intercal\,)\\
+&= 2.7150 \\
+&> \hat\lambda f'(\mathbf{x}_1) + \lambda f'(\mathbf{x}_2) \\
+&= 0.7 * 0 + 0.3 * 8 \\
+&= 2.4
+\end{align*}
+
+Thus, the original problem is not convex.
+
+\subsection{GNS p.490, 2.3}
+
+Assuming that $a, b \in \mathbb{R}$, 
+\begin{enumerate}
+\item $a = 0, b = 0$ result in an empty constraint set.
+\item $a \neq 0, b \neq 0$ will always contain non-linearity $ae^{x_1}, be^{x_2}$. As we already shown in Problem \ref{prob:hw5-prob2-a}, such non-convex function will result in a non-convex constraint set.
+\end{enumerate}
+
+In summary, no values of $a$ and $b$ will make this problem convex. 
+
+\subsection{GNS p.490, 2.4}
+
+The original problem is for finding minimum distance is
+\[
+\min_\mathbf{x}\,h(\mathbf{x})=\sqrt{\mathbf{(x-x_0)^\intercal\,(x-x_0)}}\,s.t.\,\mathbf{ax} = b
+\]
+On the domain of $\sqrt x$, this function is monotonic increasing. Therefore, solving for the minimum for the original problem is equivalent for solving the given problem). 
+
+Take the Hessian of $f(x)$
+\[
+H_f(\mathbf{x}) = \mathbf{I}_n =                       \left(\begin{array}{ccccc}
+                             1&0&0&\cdots &0\\
+                             0&1&0&\cdots &0\\
+                             0&0&1&\cdots &0\\
+                             \vdots&&&\ddots&\\
+                             0&0&0&\cdots &1
+                      \end{array}\right)
+\]
+where $n$ is the dimension of $\mathbf{x}$.
+
+It is obvious that $d^\intercal H_f(\mathbf{x}) d \geq 0, \forall d \in \mathbb{R}^n, d \neq 0$, which means that this Hessian is positive definite and therefore the function is strictly convex. In addition, as already proven, affine constraint sets are convex sets. Combining both, this problem is convex.
+
+
+\subsection{A QP with Affine Constraints}
+
+The affine constraint here defines a convex set. The objective function can be written as
+\[
+f = \frac{1}{2}x^\intercal\left(
+\begin{array}{ccc}
+     2 & 1 & 0\\
+     1 & 6 & 0\\
+     0 & 0 & 0\\
+\end{array}
+\right)
+x + \left(
+\begin{array}{c}
+     4 \\ 5 \\ 6
+\end{array}
+\right)x
+\]
+
+It is easy to show that function in the form of $\frac{1}{2}x^\intercal A x + b^Tx$ is convex by applying convex definition with AM-GM inequality and the convexity preserving operations. Thus, this problem is convex.
+
+
+
+\end{document}
