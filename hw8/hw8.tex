@@ -1,0 +1,223 @@
+\input{settings} 
+\begin{document}
+
+\lhead{Yida Liu} 
+\rhead{EECS 416 Spring 2020 \\ Convex Optimization for Engineering \\ Homework 8} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\section{Order and Rate of Convergence}
+
+\subsection{$x^{(k)} = 2 + 0.2^k$}
+\par Clearly, the algorithm converges to 2.
+\[
+\lim_{k \to \infty} \frac{||x^{k+1} - x^*||}{||x^{(k)} - x^*||} = \lim_{k \to \infty} \frac{ 0.2^{k + 1}}{0.2^{k}} = 0.2
+\]
+The algorithm converge at least linearly.
+\[
+\lim_{k \to \infty} \frac{||x^{(k+1)} - x^*||}{||x^{(k)} - x^*||^p} = \frac{0.2^{k+1}}{0.2^{kp}} = \frac{0.2}{0.2^{k(p - 1)}} = \infty
+\]
+Linear convergence.
+
+\subsection{$x^{(k)} = 1 + (\frac{4}{k})^k$}
+\begin{align*}
+\lim_{k\to\infty} x^{(k)} = 1 + \lim_{k\to\infty} (\frac{4}{k})^k = 1
+\end{align*}
+\[
+\lim_{x \to \infty} \frac{||x^{(k+1)} - x^*||}{||x^{(k)} - x^*||} = \frac{(4/(k+1))^{(k+1)}}{(4/k)^k} = 0
+\]
+The algorithm converge at least linearly.
+\[
+\lim_{k \to \infty} \frac{||x^{(k+1)} - x^*||}{||x^{(k)} - x^*||^p} = \frac{(4/(k+1))^{(k+1)}}{(4/k)^{pk}} = \infty
+\]
+Linear convergence.
+
+\subsection{$x^{(k)} = 2^{-2^k}$}
+\begin{align*}
+\lim_{k\to\infty} x^{(k)} =  \lim_{k\to\infty} 2^{-2^k}= 0
+\end{align*}
+\[
+\lim_{k \to \infty} \frac{||x^{(k+1)} - x^*||}{||x^{(k)} - x^*||} = \frac{2^{-2^{(k+1)}}}{2^{-2^k}} = 0
+\]
+
+The algorithm converge at least linearly.
+\[
+\lim_{k \to \infty} \frac{||x^{(k+1)} - x^*||}{||x^{(k)} - x^*||^p} = \frac{2^{-2^{(k+1)}}}{2^{-2^(pk)}} = \infty
+\]
+Linear convergence.
+
+\subsection{$x^{(k+1)} = \frac{1}{2}x^{(k)} + \frac{8}{x^{(k)}}$}
+Suppose the algorithm converges, we have
+\[
+x^* = \frac{1}{2}x^* + \frac{8}{x^{*}}
+\]
+\[
+x^* = \pm 4
+\]
+The problem gives $x^{(0)} \leq 0$, we have $x^* = -4$.
+
+\[
+\lim_{k \to \infty} \frac{||x^{(k+1)} - x^*||}{||x^{(k)} - x^*||^2} = 
+\lim_{k \to \infty} \frac{||\frac{1}{2}x^{(k)} + \frac{8}{x^{(k)}} + 4||}{||x^{(k)} + 4||^2} = \lim_{k \to \infty} \frac{1}{||2x^{(k)}||} = \frac{1}{8}
+\]
+The algorithm converges at order 2.
+
+\section{Convergence of SD}
+
+\[
+f(\bm x) = x_1^2 + 2x_2^2
+\]
+Starting at $\bm x^{(0)} =\begin{pmatrix}2 \\ 1\end{pmatrix}$
+\subsection{Recurrence Relation}
+We verify that using numeric example for the first 5 iterations.
+\begin{gather*}
+x^{(1-5)} = \left(\begin{array}{ccccc}
+2 & 0.6667 & 0.2222 & 0.0741 & 0.0247\\
+1 & -0.3333 & 0.1111 & -0.0370 & 0.0123
+\end{array}\right) \\
+x_k^{(1-5)} = \left(\begin{array}{ccccc}
+2 & 0.6667 & 0.2222 & 0.0741 & 0.0247\\
+1 & -0.3333 & 0.1111 & -0.0370 & 0.0123
+\end{array}\right)
+\end{gather*}
+which are equivalent. Similarly, 
+\begin{gather*}
+f^{(1-4)} / 9 = \left(\begin{array}{cccc}
+0.6667 & 0.0741 & 0.0082 & \text{9.1111e-04}
+\end{array}\right)\\
+f^{(2-5)} = \left(\begin{array}{cccc}
+0.6667 & 0.0741 & 0.0082 & \text{9.1449e-04}
+\end{array}\right)
+\end{gather*}
+They are roughly equal. The error probably coming from round-off for division during the numeric computation.
+\par \textit{See attached code for the validation of first 100 iteration. }
+
+\subsection{$\bm x^*$ and Convergence Ratio}
+
+\begin{align*}
+\lim_{k\to\infty} x^{(k)} = \lim_{k\to\infty} \frac{1}{3^k}\begin{pmatrix}2 \\ (-1)^k\end{pmatrix} = \begin{pmatrix}0 \\ 0\end{pmatrix}
+\end{align*}
+
+\begingroup
+\renewcommand*{\arraystretch}{1.6}
+\[
+\lim_{x \to \infty} \frac{||x^{(k+1)} - x^*||}{||x^{(k)} - x^*||} = \lim_{x \to \infty}
+\frac
+{\Bigg|\Bigg|\begin{pmatrix}
+\frac{2}{3^{k+1}}\\
+\frac{-1^{k+1}}{3^{k+1}}
+\end{pmatrix}\Bigg|\Bigg|}
+{\Bigg|\Bigg|\begin{pmatrix}
+\frac{2}{3^{k}}\\
+\frac{-1^{k}}{3^{k}}
+\end{pmatrix}\Bigg|\Bigg|}
+ = \frac{1}{3}
+\]
+\endgroup
+
+
+
+
+\section{SD / NR}
+\[
+f(\bm x) = x_2 (x_1 -2) ^2 + 10(x_2 - 1)^2
+\]
+with $x^{(0)} = \begin{pmatrix}1 \\ 1\end{pmatrix}$. 
+
+\subsection{SD}
+\begin{itemize}
+\item $k = 1$ \par 
+\begin{gather*}
+d = \begin{pmatrix} 2 \\ -1\end{pmatrix}\\
+x^{(1)} = \left(\begin{array}{c}
+2\,\alpha +1\\
+1-\alpha 
+\end{array}\right)\\
+\phi = 10\,\alpha^2 -{{\left(2\,\alpha -1\right)}}^2 \,{\left(\alpha -1\right)} \\
+\end{gather*}
+Solve for optimal $\alpha$ 
+\begin{gather*}
+\alpha = 0.1460 \\
+x^{(1)} = \left(\begin{array}{c}
+1.2920\\
+0.8540
+\end{array}\right)
+\end{gather*}
+\item $k = 2$
+\begin{gather*}
+d = \left(\begin{array}{c}
+1.2093\\
+2.4186
+\end{array}\right)\\
+x^{(2)} = \left(\begin{array}{c}
+1.2093\,\alpha +1.2920\\
+2.4186\,\alpha +0.8540
+\end{array}\right)\\
+\phi = 10\,{{\left(2.4186\,\alpha -0.1460\right)}}^2 +{{\left(1.2093\,\alpha -0.7080\right)}}^2 \,{\left(2.4186\,\alpha +0.8540\right)}
+\end{gather*}
+Solve for optimal $\alpha$
+\begin{gather*}
+\alpha = 0.0653 \\
+x^{(2)} = \left(\begin{array}{c}
+1.3710\\
+1.0120
+\end{array}\right)
+\end{gather*}
+\end{itemize}
+
+\subsection{NR}
+
+\begin{enumerate}
+\item $k = 1$
+\begin{gather*}
+H_f = \left(\begin{array}{cc}
+2 & -2\\
+-2 & 20
+\end{array}\right)\\
+g = \left(\begin{array}{c}
+-2\\
+1
+\end{array}\right)\\
+d = \left(\begin{array}{c}
+1.0556\\
+0.0556
+\end{array}\right)ca \\
+x^{(1)} = \left(\begin{array}{c}
+1.0556\,\alpha +1\\
+0.0556\,\alpha +1
+\end{array}\right)\\
+\phi = {{\left(1.0556\,\alpha -1\right)}}^2 \,{\left(0.0556\,\alpha +1\right)}+0.0309\,\alpha^2\\
+\alpha = 0.9230\\
+x^{(1)} =\left(\begin{array}{c}
+1.9743\\
+1.0513
+\end{array}\right)
+\end{gather*}
+
+\item $k = 2$
+\begin{gather*}
+H_f = \left(\begin{array}{cc}
+2.1026 & -0.0514\\
+-0.0514 & 20
+\end{array}\right)\\
+g = \left(\begin{array}{c}
+-0.0540\\
+1.0263
+\end{array}\right)\\
+d = \left(\begin{array}{c}
+0.0244\\
+-0.0512
+\end{array}\right)
+x^{(2)} = \left(\begin{array}{c}
+0.0244\,\alpha +1.9743\\
+1.0513-0.0512\,\alpha 
+\end{array}\right)\\
+\phi =10\,{{\left(0.0512\,\alpha -0.0513\right)}}^2 -{\left(0.0512\,\alpha -1.0513\right)}\,{{\left(0.0244\,\alpha -0.0257\right)}}^2\\
+\alpha = 1.0017 \\
+x^{(2)} = \left(\begin{array}{c}
+1.9988\\
+0.9999
+\end{array}\right)
+\end{gather*}
+\end{enumerate}
+
+\end{document}
